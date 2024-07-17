@@ -5,10 +5,10 @@ fshorrent is a lightweight, cross-platform BitTorrent client implemented in F# f
 ## Features to Implement
 
 
-- [ ] Decode bencoded strings
-- [ ] Decode bencoded integers
-- [ ] Decode bencoded lists
-- [ ] Decode bencoded dictionaries
+- [x] Decode bencoded strings
+- [x] Decode bencoded integers
+- [x] Decode bencoded lists
+- [x] Decode bencoded dictionaries
 - [ ] Parse torrent file
 - [ ] Calculate info hash
 - [ ] Piece hashes

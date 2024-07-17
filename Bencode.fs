@@ -8,7 +8,7 @@ type Bencode =
     | BString of string
     | BInteger of int64
     | BList of Bencode list
-    | BDictionary of Map<string, Bencode>
+    | BDictionary of Map<Bencode, Bencode>
 
 let charsToInt: char list -> int = System.String.Concat >> int
 
@@ -39,8 +39,14 @@ let rec parseList () : Parser<Bencode, unit> =
         let parseListItem = parseValue () .>> optional (pchar ',')
         return! many parseListItem .>> pchar 'e' |>> BList
     }
+and parseDict () : Parser<Bencode, unit> =
+    parse {
+        let parseKeyValue = pipe2 parseBString (parseValue ()) (fun a b -> (a, b))
 
-and parseValue () : Parser<Bencode, unit> = choice [parseBInteger; parseBString; parseList ()]
+        return! pchar 'd' >>. many parseKeyValue .>> pchar 'e' |>> (Map.ofSeq >> BDictionary)
+    }
+
+and parseValue () : Parser<Bencode, unit> = choice [parseBInteger; parseBString; parseList (); parseDict ()]
 // let parsed = run parseBString "4:spam"
 
 // printfn "%A" parsed
